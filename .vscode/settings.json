@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "core.h": "c",
+        "stdlib.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "format": "c",
+        "initializer_list": "c",
+        "span": "c",
+        "*.tcc": "c",
+        "game.h": "c",
+        "sdl.h": "c",
+        "settings.h": "c",
+        "stb_image.h": "c",
+        "string": "c"
+    }
+}
