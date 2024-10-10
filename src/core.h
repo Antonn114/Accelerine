@@ -6,6 +6,7 @@
 
 /* Math */
 #define HANDMADE_MATH_NO_SIMD
+#define HANDMADE_MATH_USE_DEGREES
 #include <HandmadeMath/HandmadeMath.h>
 
 #define MIN(a,b) (((a)<(b))?(a):(b))

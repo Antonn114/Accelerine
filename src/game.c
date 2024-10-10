@@ -1,50 +1,66 @@
 #include "game.h"
 #include "image.h"
 
-image sample_image;
-
 Uint32 *screenPixels; // We store the information of RGBA in each Uint32
-float rotation = 0;
+
+#define m_pixel(x, y) y*SCREEN_WIDTH + x
+#define m_color(r, g, b, a) a << 24 | r << 16 | g << 8 | b
+#define COL_SKYBLUE m_color(135, 206, 235, 255)
+#define COL_GRASSGREEN m_color(50, 205, 50, 255)
+#define COL_BRICKRED m_color(178, 34, 34, 255)
+#define COL_BLACK m_color(0, 0, 0, 255)
+
+image texture_floor;
+
+void clear_screen(Uint32 col){
+    for (int i = 0; i < SCREEN_WIDTH* SCREEN_HEIGHT; i++){
+        screenPixels[i] = col;
+    }
+}
+
+float world_x, world_y, player_angle, fov_half, far, near;
 
 void game_setup(){
-    screenPixels = (Uint32*) malloc(SCREEN_WIDTH * SCREEN_HEIGHT * 4);
-    load_image(&sample_image, "gameassets/meow.jpg");
+    load_image(&texture_floor, "gameassets/road-extended.png");
+    screenPixels = (Uint32*) malloc(SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
+    world_x = 36;
+    world_y = 0;
+    player_angle = -90;
+    fov_half = 45;
+    near = 0.01;
+    far = 1;
 }
 
 void game_update(){
-    for (int x = 0; x < SCREEN_WIDTH; x++){
-        for (int y = 0; y < SCREEN_HEIGHT; y++){
-            screenPixels[y*SCREEN_WIDTH + x] = 255 << 24;
+    clear_screen(COL_BLACK);
+    float far_x1 = world_x + HMM_CosF(player_angle - fov_half) * far;
+    float far_y1 = world_y + HMM_SinF(player_angle - fov_half) * far;
+
+    float far_x2 = world_x + HMM_CosF(player_angle + fov_half) * far;
+    float far_y2 = world_y + HMM_SinF(player_angle + fov_half) * far;
+
+    float near_x1 = world_x + HMM_CosF(player_angle - fov_half) * near;
+    float near_y1 = world_y + HMM_SinF(player_angle - fov_half) * near;
+    
+    float near_x2 = world_x + HMM_CosF(player_angle + fov_half) * near;
+    float near_y2 = world_y + HMM_SinF(player_angle + fov_half) * near;
+
+    for (int y = HALF_HEIGHT; y < SCREEN_HEIGHT; y++){
+        float depth = y / (float)HALF_HEIGHT;
+        float start_x = (far_x1 - near_x1) / depth + near_x1;
+        float start_y = (far_y1 - near_y1) / depth + near_y1;
+        float end_x = (far_x2 - near_x2) / depth + near_x2;
+        float end_y = (far_y2 - near_y2) / depth + near_y2;
+
+        for (int x = 0; x < SCREEN_WIDTH; x++){
+            float sample_width = x/(float)SCREEN_WIDTH;
+            float sample_x = ((end_x - start_x) * sample_width + start_x + 1)*(float)texture_floor.width;
+            float sample_y = ((end_y - start_y) * sample_width + start_y + 1)*(float)texture_floor.height;
+            screenPixels[m_pixel(x, y)] = get_image_pixel(&texture_floor,
+            (int)(sample_x)%texture_floor.width,
+            (int)(sample_y)%texture_floor.height);
         }
     }
-
-    HMM_Mat4 trans_mat = HMM_MulM4(
-        HMM_Translate((HMM_Vec3){{HALF_WIDTH, HALF_HEIGHT, 1}}),
-        HMM_MulM4(
-            HMM_MulM4(
-                HMM_MulM4(
-                HMM_Rotate_RH(rotation*3, (HMM_Vec3){0, 1, 0}),
-                HMM_Rotate_RH(rotation*2, (HMM_Vec3){0, 0, 1})),
-                HMM_Rotate_RH(rotation, (HMM_Vec3){1, 0, 0})),
-            HMM_Translate((HMM_Vec3){-sample_image.width/2, -sample_image.height/2, 1}))
-    );
-
-    // 1. Put the rotation anchor of the image to the center of the image
-    // 2. rotate the image
-    // 3. Put the image at the center of the screen
-
-    for (int x = 0; x < sample_image.width; x++){
-        for (int y = 0; y < sample_image.height; y++){
-            HMM_Vec4 pos_mat = (HMM_Vec4){x, y, 1, 1};
-            pos_mat = HMM_MulM4V4(trans_mat, pos_mat);
-
-            if (pos_mat.Y < 0 || pos_mat.X < 0 || pos_mat.Y >= SCREEN_HEIGHT || pos_mat.X >= SCREEN_WIDTH){
-                continue;
-            }
-            screenPixels[(int)pos_mat.Y*SCREEN_WIDTH + (int)pos_mat.X] = get_image_pixel(&sample_image, x, y);
-        }
-    }
-    rotation += 0.02f;
 }
 
 void game_end(){

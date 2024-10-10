@@ -1,7 +1,3 @@
-/**
- * main.c holds the main driver code for SDL graphics rendering and not the main game. For the main game, please see game.h
- */
-
 #include "core.h"
 #include "settings.h"
 #include "game.h"
@@ -12,6 +8,9 @@ SDL_Texture* texture = NULL;
 
 int running = 1;
 
+/**
+ * Accelerine main driver code for SDL2 frontend. For the main game, please see game.c
+ */
 int main(int argc, char** argv){
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
@@ -21,13 +20,13 @@ int main(int argc, char** argv){
 
     /* Initialize SDL Window and Renderer */
     window = SDL_CreateWindow(
-        "Test",
+        "Accelerine",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		SCREEN_WIDTH, SCREEN_HEIGHT,
 		0
 	);
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
     /* Main SDL Loop */
     SDL_Event sdl_event;
