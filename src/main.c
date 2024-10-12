@@ -1,6 +1,7 @@
 #include "game.h"
 #include "input.h"
 #include "settings.h"
+#include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_events.h>
 
 SDL_Window *window = NULL;
@@ -43,7 +44,6 @@ int main(int argc, char **argv) {
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;
   float deltaTime = 0;
-
   while (running) {
     LAST = NOW;
     NOW = SDL_GetPerformanceCounter();

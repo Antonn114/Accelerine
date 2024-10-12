@@ -18,7 +18,16 @@
 #define green(rgba) (((rgba) >> 8) & ((1 << 8) - 1))
 #define blue(rgba) ((rgba) & ((1 << 8) - 1))
 
+typedef struct color_f_s{
+  float r, g, b, a;
+} color_f;
+
 extern Uint32 *screenPixels;
+
+extern color_f blend(color_f a, color_f b);
+extern color_f color_uint_to_float(Uint32 c);
+extern Uint32 color_float_to_uint(color_f c);
+extern void set_texture_opacity(texture *tex, float opacity);
 
 /**
 * Clear the screen to a ARGB color under Uin32
@@ -28,7 +37,7 @@ extern void clear_screen(Uint32 col);
 /**
 * Render an image to origin `(offset_x, offset_y)` with a cropped image from `(x, y)` to `(x + w, y + h)`
 */
-extern void render_image(texture *text, int offset_x, int offset_y, int x, int y,
+extern void render_image(texture *tex, int offset_x, int offset_y, int x, int y,
                   int w, int h);
 
 /**

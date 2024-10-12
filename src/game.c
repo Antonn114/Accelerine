@@ -13,6 +13,7 @@ Uint32 *screenPixels; // We store the information of RGBA in each Uint32. This w
 
 fps_counter my_fps_counter;
 texture texture_floor;
+texture mouse_pointer_tex;
 bitmapfont test_bitmapfont;
 
 typedef struct character_s{
@@ -33,6 +34,8 @@ void game_setup() {
 
   my_character.speed = 0.2;
   load_texture(&my_character.tex, "gameassets/luna.png");
+  load_texture(&mouse_pointer_tex, "gameassets/luna.png");
+  
 }
 
 void display_fps_counter(float delta_time) {
@@ -54,7 +57,7 @@ void game_update(float delta_time) {
   my_character.y += my_character.vec_dir.Y*my_character.speed*delta_time;
 
   render_image(&my_character.tex, my_character.x, my_character.y, 0, 0, my_character.tex.width, my_character.tex.height);
-  render_image(&my_character.tex, input_mouse_x, input_mouse_y, 0, 0, my_character.tex.width, my_character.tex.height);
+  render_image(&mouse_pointer_tex, input_mouse_x, input_mouse_y, 0, 0, mouse_pointer_tex.width, mouse_pointer_tex.height);
   // UI, HUD
   char out_string[20];
   sprintf(out_string, "Mouse pressed: %d", input_mouse_pressed);
@@ -63,6 +66,8 @@ void game_update(float delta_time) {
 
   // Update FPS
   increment_fps_counter(&my_fps_counter, delta_time);
+
+  set_texture_opacity(&mouse_pointer_tex, my_fps_counter.total_time/my_fps_counter.update_delay);
 }
 
 void game_end() {

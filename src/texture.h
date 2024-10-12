@@ -5,6 +5,7 @@
 
 typedef struct texture_s {
     int width, height, n;
+    float opacity;
     unsigned char *data;
     // ... process data if not NULL ...
     // ... x = width, y = height, n = # 8-bit components per pixel ...
@@ -12,19 +13,21 @@ typedef struct texture_s {
     // ... but 'n' will always be the number that it would have been if you said 0
 } texture;
 
+extern void set_texture_opacity(texture *tex, float opacity);
+
 /**
  * Load a texture from `file_path` to `i`
  */
-int load_texture(texture* i, const char* file_path);
+extern int load_texture(texture* i, const char* file_path);
 
 /**
  * Get pixel color at `(x, y)` from texture `i`
  */
 inline Uint32 get_texture_pixel(texture* i, int x, int y){
-    return i->data[y*i->width*i->n + x*i->n + 3] << (24)
+    return (int)(i->data[y*i->width*i->n + x*i->n + 3] * i->opacity) << (24)
                 | i->data[y*i->width*i->n+ x*i->n + 0] << (16)
                 | i->data[y*i->width*i->n + x*i->n + 1] << (8)
-                | i->data[y*i->width*i->n + x*i->n + 2];;
+                | i->data[y*i->width*i->n + x*i->n + 2];
 }
 
 /**
