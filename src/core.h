@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 /* Math */
 #define HANDMADE_MATH_NO_SIMD

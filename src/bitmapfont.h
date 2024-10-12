@@ -9,6 +9,9 @@ typedef struct bitmapfont_s {
     int mNewLine, mSpace;
 } bitmapfont;
 
+/**
+ * Loads an image file as a bitmap font. Based on this Lazy Foo tutorial: https://lazyfoo.net/tutorials/SDL/41_bitmap_fonts/index.php
+ */
 int load_bitmapfont(bitmapfont* font, const char* file_path);
 void free_bitmapfont(bitmapfont* font);
 

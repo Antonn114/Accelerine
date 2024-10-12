@@ -1,4 +1,5 @@
 #include "game.h"
+#include "input.h"
 #include "settings.h"
 
 SDL_Window *window = NULL;
@@ -32,9 +33,9 @@ int main(int argc, char **argv) {
                               SCREEN_HEIGHT);
   /* Main SDL Loop */
   SDL_Event sdl_event;
-  const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
 
   /* Setup Game */
+  input_map_init();
   game_setup();
 
   Uint64 NOW = SDL_GetPerformanceCounter();
@@ -44,18 +45,30 @@ int main(int argc, char **argv) {
   while (running) {
     LAST = NOW;
     NOW = SDL_GetPerformanceCounter();
-
     deltaTime = (float)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
 
     while (SDL_PollEvent(&sdl_event) != 0) {
       if (sdl_event.type == SDL_QUIT) {
         running = 0;
       }
+      else if( sdl_event.type == SDL_KEYDOWN ){
+        switch(sdl_event.key.keysym.scancode){
+          case SDL_SCANCODE_ESCAPE:
+            running = 0;
+          break;
+          default:
+            input_map_turn_on(sdl_event.key.keysym.scancode);
+          break;
+        }
+      }
+      if( sdl_event.type == SDL_KEYUP ){
+        switch(sdl_event.key.keysym.scancode){
+          default:
+            input_map_turn_off(sdl_event.key.keysym.scancode);
+          break;
+        }
+      }
     }
-    if (keyboard_state[SDL_SCANCODE_ESCAPE] || keyboard_state[SDL_QUIT]) {
-      running = 0;
-    }
-
     /* Main game loop */
     game_update(deltaTime);
 
