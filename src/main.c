@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
   renderer =
       SDL_CreateRenderer(window, -1,
-                         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC |
+                         SDL_RENDERER_ACCELERATED | (VSYNC & SDL_RENDERER_PRESENTVSYNC) |
                              SDL_RENDERER_TARGETTEXTURE);
   texture_raster = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                               SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH,
