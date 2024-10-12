@@ -26,13 +26,13 @@ int main(int argc, char **argv) {
       SDL_CreateWindow("Accelerine", SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 
-  renderer =
-      SDL_CreateRenderer(window, -1,
-                         SDL_RENDERER_ACCELERATED | (VSYNC & SDL_RENDERER_PRESENTVSYNC) |
-                             SDL_RENDERER_TARGETTEXTURE);
+  renderer = SDL_CreateRenderer(window, -1,
+                                SDL_RENDERER_ACCELERATED |
+                                    (VSYNC & SDL_RENDERER_PRESENTVSYNC) |
+                                    SDL_RENDERER_TARGETTEXTURE);
   texture_raster = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
-                              SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH,
-                              SCREEN_HEIGHT);
+                                     SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH,
+                                     SCREEN_HEIGHT);
   /* Main SDL Loop */
   SDL_Event sdl_event;
 
@@ -45,33 +45,34 @@ int main(int argc, char **argv) {
   Uint64 LAST = 0;
   float deltaTime = 0;
   while (running) {
-    LAST = NOW;
-    NOW = SDL_GetPerformanceCounter();
-    deltaTime = (float)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
+    
 
-    while (SDL_PollEvent(&sdl_event) != 0) {
-      switch(sdl_event.type){
+    while (SDL_PollEvent(&sdl_event)) {
+      switch (sdl_event.type) {
         case SDL_QUIT:
           running = 0;
-        break;
+          break;
         case SDL_KEYDOWN:
           input_map_turn_on(sdl_event.key.keysym.scancode);
-        break;
+          break;
         case SDL_KEYUP:
           input_map_turn_off(sdl_event.key.keysym.scancode);
           break;
-        case SDL_MOUSEMOTION: case SDL_MOUSEBUTTONDOWN: case SDL_MOUSEBUTTONUP:
-          SDL_GetMouseState( &input_mouse_x, &input_mouse_y);
-          if (sdl_event.type == SDL_MOUSEBUTTONDOWN){
-            input_mouse_pressed = 1;
-          }else if (sdl_event.type == SDL_MOUSEBUTTONUP){
-            input_mouse_pressed = 0;
-          }
-        break;
-        default:
-        break;
-      }
+        case SDL_MOUSEMOTION:
+          SDL_GetMouseState(&input_mouse_x, &input_mouse_y);
+          break;
+        case SDL_MOUSEBUTTONDOWN:
+          input_mouse_pressed = 1;
+          break;
+        case SDL_MOUSEBUTTONUP:
+          input_mouse_pressed = 0;
+          break;
+      };
     }
+    LAST = NOW;
+    NOW = SDL_GetPerformanceCounter();
+    deltaTime =
+        (float)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
 
     /* Main game loop */
     game_update(deltaTime);

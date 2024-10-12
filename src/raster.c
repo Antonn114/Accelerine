@@ -5,75 +5,12 @@ float alpha_blend_util(float a, float b, float alpha_a, float alpha_b,
   return (a * alpha_a + b * alpha_b * (1.0 - alpha_a)) / (out_alpha + 0.0001);
 }
 
-color_f normal_blend(color_f a, color_f b) {
+color_f normal_blend(color_f a, color_f b){
   color_f out;
-  out.a = a.a + b.a * (1.0 - a.a);
-  out.r = alpha_blend_util(a.r, b.r, a.a, b.a, out.a);
-  out.g = alpha_blend_util(a.g, b.g, a.a, b.a, out.a);
-  out.b = alpha_blend_util(a.b, b.b, a.a, b.a, out.a);
-  return out;
-}
-
-color_f multiply_blend(color_f a, color_f b) {
-  color_f out;
-  out.a = a.a + b.a * (1.0 - a.a);
-  out.r = alpha_blend_util(a.r * b.r, b.r, a.a, b.a, out.a);
-  out.g = alpha_blend_util(a.g * b.g, b.g, a.a, b.a, out.a);
-  out.b = alpha_blend_util(a.b * b.b, b.b, a.a, b.a, out.a);
-  return out;
-}
-
-color_f screen_blend(color_f a, color_f b) {
-  color_f out;
-  out.a = a.a + b.a * (1.0 - a.a);
-  out.r =
-      alpha_blend_util(1.0 - (1.0 - a.r) * (1.0 - b.r), b.r, a.a, b.a, out.a);
-  out.g =
-      alpha_blend_util(1.0 - (1.0 - a.g) * (1.0 - b.g), b.g, a.a, b.a, out.a);
-  out.b =
-      alpha_blend_util(1.0 - (1.0 - a.b) * (1.0 - b.b), b.b, a.a, b.a, out.a);
-  return out;
-}
-
-color_f overlay_blend(color_f a, color_f b) {
-  color_f out;
-  out.a = a.a + b.a * (1.0 - a.a);
-  out.r = a.r < 0.5 ? alpha_blend_util(2 * a.r * b.r, b.r, a.a, b.a, out.a)
-                    : alpha_blend_util(1.0 - 2 * (1.0 - a.r) * (1.0 - b.r), b.r,
-                                       a.a, b.a, out.a);
-  out.g = a.g < 0.5 ? alpha_blend_util(2 * a.g * b.g, b.g, a.a, b.a, out.a)
-                    : alpha_blend_util(1.0 - 2 * (1.0 - a.g) * (1.0 - b.g), b.g,
-                                       a.a, b.a, out.a);
-  out.b = a.b < 0.5 ? alpha_blend_util(2 * a.b * b.b, b.b, a.a, b.a, out.a)
-                    : alpha_blend_util(1.0 - 2 * (1.0 - a.b) * (1.0 - b.b), b.b,
-                                       a.a, b.a, out.a);
-  return out;
-}
-
-color_f hard_light_blend(color_f a, color_f b) {
-  color_f out;
-  out.a = a.a + b.a * (1.0 - a.a);
-  out.r = b.r < 0.5 ? alpha_blend_util(2 * a.r * b.r, b.r, a.a, b.a, out.a)
-                    : alpha_blend_util(1.0 - 2 * (1.0 - a.r) * (1.0 - b.r), b.r,
-                                       a.a, b.a, out.a);
-  out.g = b.g < 0.5 ? alpha_blend_util(2 * a.g * b.g, b.g, a.a, b.a, out.a)
-                    : alpha_blend_util(1.0 - 2 * (1.0 - a.g) * (1.0 - b.g), b.g,
-                                       a.a, b.a, out.a);
-  out.b = b.b < 0.5 ? alpha_blend_util(2 * a.b * b.b, b.b, a.a, b.a, out.a)
-                    : alpha_blend_util(1.0 - 2 * (1.0 - a.b) * (1.0 - b.b), b.b,
-                                       a.a, b.a, out.a);
-  return out;
-}
-
-color_f soft_light_blend(color_f a, color_f b) {
-  color_f out;
-  out.a = a.a + b.a * (1.0 - a.a);
-  out.r = alpha_blend_util((1.0 - 2 * b.r) * a.r * a.r + 2 * b.r * a.r, b.r,
-                           a.a, b.a, out.a);
-  out.g = alpha_blend_util((1.0 - 2 * b.g) * a.g * a.g + 2 * b.g * a.g, b.g,
-                           a.a, b.a, out.a);
-  out.b = alpha_blend_util((1.0 - 2 * b.b) * a.b * a.b + 2 * b.b * a.b, b.b,
-                           a.a, b.a, out.a);
+  out.a = a.a + b.a* (1.0 - a.a);
+  out.r = a.r * a.a + b.r * (1.0 - a.a);
+  out.g = a.g * a.a + b.g * (1.0 - a.a);
+  out.b = a.b * a.a + b.b * (1.0 - a.a);
   return out;
 }
 

@@ -27,10 +27,6 @@ extern Uint32 *screenPixels;
 
 extern color_f normal_blend(color_f a, color_f b);
 extern color_f multiply_blend(color_f a, color_f b);
-extern color_f screen_blend(color_f a, color_f b);
-extern color_f overlay_blend(color_f a, color_f b);
-extern color_f hard_light_blend(color_f a, color_f b);
-extern color_f soft_light_blend(color_f a, color_f b);
 
 extern color_f color_uint_to_float(Uint32 c);
 extern Uint32 color_float_to_uint(color_f c);
