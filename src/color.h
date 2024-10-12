@@ -8,6 +8,8 @@
 #define COL_BLACK m_color(0, 0, 0, 255)
 
 #define alpha(rgba) ((rgba) >> 24)
-#define rgb(rgba) ((rgba) & ((1 << 24) - 1))
+#define red(rgba) (((rgba) >> 16) & ((1 << 8) - 1))
+#define green(rgba) (((rgba) >> 8) & ((1 << 8) - 1))
+#define blue(rgba) ((rgba) & ((1 << 8) - 1))
 
 #endif // ACCELERINE_COLOR_PALETTE_H
