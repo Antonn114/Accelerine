@@ -67,7 +67,7 @@ void game_update(float delta_time) {
   // Update FPS
   increment_fps_counter(&my_fps_counter, delta_time);
 
-  set_texture_opacity(&mouse_pointer_tex, my_fps_counter.total_time/my_fps_counter.update_delay);
+  set_texture_opacity(&mouse_pointer_tex, 0.35);
 }
 
 void game_end() {

@@ -1,12 +1,31 @@
 #include "raster.h"
 
 
-color_f blend(color_f a, color_f b){
+color_f normal_blend(color_f a, color_f b){
   color_f out;
   out.a = a.a + b.a* (1.0 - a.a);
   out.r = (a.r * a.a + b.r * b.a * (1.0 - a.a))/(out.a + 0.0001);
   out.g = (a.g * a.a + b.g * b.a * (1.0 - a.a))/(out.a + 0.0001);
   out.b = (a.b * a.a + b.b * b.a * (1.0 - a.a))/(out.a + 0.0001);
+  return out;
+}
+
+
+color_f multiply_blend(color_f a, color_f b){
+  color_f out;
+  out.a = a.a + b.a* (1.0 - a.a);
+  out.r = (a.r * b.r * a.a + b.r * b.a * (1.0 - a.a))/(out.a + 0.0001);
+  out.g = (a.g * b.g * a.a + b.g * b.a * (1.0 - a.a))/(out.a + 0.0001);
+  out.b = (a.b * b.b * a.a + b.b * b.a * (1.0 - a.a))/(out.a + 0.0001);
+  return out;
+}
+
+color_f screen_blend(color_f a, color_f b){
+  color_f out;
+  out.a = a.a + b.a* (1.0 - a.a);
+  out.r = (a.r * (1 - (1 - a.r)* (1 - b.r)) * a.a + b.r * b.a * (1.0 - a.a))/(out.a + 0.0001);
+  out.g = (a.g * (1 - (1 - a.g)* (1 - b.g)) * a.a + b.g * b.a * (1.0 - a.a))/(out.a + 0.0001);
+  out.b = (a.b * (1 - (1 - a.b)* (1 - b.b)) * a.a + b.b * b.a * (1.0 - a.a))/(out.a + 0.0001);
   return out;
 }
 
@@ -23,7 +42,7 @@ Uint32 color_float_to_uint(color_f c){
   return m_color((int)(c.r*255), (int)(c.g*255), (int)(c.b*255), (int)(c.a*255));
 }
 Uint32 alpha_blending(Uint32 col1, Uint32 col2){
-  return color_float_to_uint(blend(color_uint_to_float(col1), color_uint_to_float(col2)));
+  return color_float_to_uint(normal_blend(color_uint_to_float(col1), color_uint_to_float(col2)));
 }
 
 void update_pixel_alpha_blending(int dst_x, int dst_y, Uint32 col){

@@ -12,6 +12,7 @@
 #define COL_GRASSGREEN m_color(50, 205, 50, 255)
 #define COL_BRICKRED m_color(178, 34, 34, 255)
 #define COL_BLACK m_color(0, 0, 0, 255)
+#define COL_WHITE m_color(255, 255, 255, 255)
 
 #define alpha(rgba) ((rgba) >> 24)
 #define red(rgba) (((rgba) >> 16) & ((1 << 8) - 1))
@@ -24,10 +25,11 @@ typedef struct color_f_s{
 
 extern Uint32 *screenPixels;
 
-extern color_f blend(color_f a, color_f b);
+extern color_f normal_blend(color_f a, color_f b);
+extern color_f multiply_blend(color_f a, color_f b);
 extern color_f color_uint_to_float(Uint32 c);
 extern Uint32 color_float_to_uint(color_f c);
-extern void set_texture_opacity(texture *tex, float opacity);
+
 
 /**
 * Clear the screen to a ARGB color under Uin32
