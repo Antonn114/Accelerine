@@ -4,7 +4,7 @@
 #include "raster.h"
 #include "utility.h"
 
-Uint32 *screenPixels; // We store the information of RGBA in each Uint32
+Uint32 *screenPixels; // We store the information of RGBA in each Uint32. This was declared in raster.h
 
 fps_counter my_fps_counter;
 texture texture_floor;
@@ -15,7 +15,6 @@ void game_setup() {
   load_bitmapfont(&test_bitmapfont, "gameassets/press_start_font.png");
   screenPixels =
       (Uint32 *)malloc(SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
-  printf("%d\n", texture_floor.n);
   init_fps_counter(&my_fps_counter, 250.0);
 }
 

@@ -6,14 +6,16 @@ int load_bitmapfont(bitmapfont *font, const char *file_path) {
     printf("Unable to load bitmapfont: %s\n", file_path);
     return 1;
   }
+  
   int cellW = font->font_tex.width / 16;
   int cellH = font->font_tex.height / 8;
   int top = cellH;
   int baseA = cellH;
   int currentChar = 0;
   Uint32 bgColor = get_texture_pixel(&font->font_tex, 0, 0);
-  for (int rows = 0; rows < 8; ++rows) {
-    for (int cols = 0; cols < 16; ++cols) {
+
+  for (int rows = 0; rows < 8; rows++) {
+    for (int cols = 0; cols < 16; cols++) {
       // Default offsets
       font->x[currentChar] = cellW * cols;
       font->y[currentChar] = cellH * rows;
@@ -60,7 +62,7 @@ int load_bitmapfont(bitmapfont *font, const char *file_path) {
           }
         }
       }
-      // Find Bottom of A
+      // Bottom offset
       if (currentChar == 'A') {
         for (int pRow = cellH - 1; pRow >= 0; --pRow) {
           for (int pCol = 0; pCol < cellW; ++pCol) {
@@ -76,7 +78,7 @@ int load_bitmapfont(bitmapfont *font, const char *file_path) {
       }
 
       // Go to the next character
-      ++currentChar;
+      currentChar++;
     }
   }
   // Calculate space
