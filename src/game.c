@@ -1,5 +1,8 @@
 #include "game.h"
+#include "HandmadeMath/HandmadeMath.h"
 #include "bitmapfont.h"
+#include "input.h"
+#include "settings.h"
 #include "texture.h"
 #include "raster.h"
 #include "utility.h"
@@ -12,12 +15,24 @@ fps_counter my_fps_counter;
 texture texture_floor;
 bitmapfont test_bitmapfont;
 
+typedef struct character_s{
+  float x, y, z;
+  float speed;
+  HMM_Vec3 vec_dir;
+  texture tex;
+} character;
+
+character my_character;
+
 void game_setup() {
   load_texture(&texture_floor, "gameassets/road-extended.png");
   load_bitmapfont(&test_bitmapfont, "gameassets/press_start_font.png");
   screenPixels =
       (Uint32 *)malloc(SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
   init_fps_counter(&my_fps_counter, 250.0);
+
+  my_character.speed = 0.2;
+  load_texture(&my_character.tex, "gameassets/luna.png");
 }
 
 void display_fps_counter(float delta_time) {
@@ -31,17 +46,19 @@ void game_update(float delta_time) {
   clear_screen(COL_BLACK);
 
   // Intermediate objects
-  char test_input[20];
-  sprintf(test_input, "Key W is pressed: %d", input_map[SDL_SCANCODE_W]);
-  render_text(&test_bitmapfont, 100, 100, test_input);
-  sprintf(test_input, "Key A is pressed: %d", input_map[SDL_SCANCODE_A]);
-  render_text(&test_bitmapfont, 100, 200, test_input);
-  sprintf(test_input, "Key S is pressed: %d", input_map[SDL_SCANCODE_S]);
-  render_text(&test_bitmapfont, 100, 300, test_input);
-  sprintf(test_input, "Key D is pressed: %d", input_map[SDL_SCANCODE_D]);
-  render_text(&test_bitmapfont, 100, 400, test_input);
-
+  my_character.vec_dir.X = (-input_map[SDL_SCANCODE_A] + input_map[SDL_SCANCODE_D]);
+  my_character.vec_dir.Y = (-input_map[SDL_SCANCODE_W] + input_map[SDL_SCANCODE_S]);
+  float magnitude = HMM_Len(my_character.vec_dir) + 0.0001;
+  my_character.vec_dir = HMM_DivV3F(my_character.vec_dir, magnitude);
+  my_character.x += my_character.vec_dir.X*my_character.speed*delta_time;
+  my_character.y += my_character.vec_dir.Y*my_character.speed*delta_time;
+  
+  render_image(&my_character.tex, my_character.x, my_character.y, 0, 0, my_character.tex.width, my_character.tex.height);
+  
   // UI, HUD
+  char test_input[20];
+  sprintf(test_input, "X: %.2f Y: %.2f", my_character.x, my_character.y);
+  render_text(&test_bitmapfont, 100, 100, test_input);
   display_fps_counter(delta_time);
 
   // Update FPS

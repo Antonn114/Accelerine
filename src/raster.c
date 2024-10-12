@@ -24,8 +24,8 @@ void clear_screen(Uint32 col) {
 
 void render_image(texture *text, int offset_x, int offset_y, int x, int y,
                   int w, int h) {
-  for (int _x = 0; _x < w; _x++) {
-    for (int _y = 0; _y < h; _y++) {
+  for (int _x = MAX(0, -offset_x); _x < MIN(w, SCREEN_WIDTH - offset_x); _x++) {
+    for (int _y = MAX(0, -offset_y); _y < MIN(h, SCREEN_HEIGHT - offset_y); _y++) {
       update_pixel_alpha_blending(offset_x + _x, offset_y + _y, get_texture_pixel(text, _x + x, _y + y));
     }
   }
