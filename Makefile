@@ -1,9 +1,31 @@
-CXXFLAGS = -O3 -ffast-math
-INCLUDE =  -I/usr/include -I./third-party
-LIBS = -lm -lSDL2
+MKDIR   := mkdir
+RMDIR   := rm -rf
+CC      := gcc
+BIN     := ./bin
+OBJ     := ./obj
+INCLUDE := ./third-party
+SRC     := ./src
+SRCS    := $(wildcard $(SRC)/*.c)
+OBJS    := $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS))
+EXE     := $(BIN)/Accelerine
+CFLAGS  := -I$(INCLUDE) -O3 -ffast-math
+LDLIBS  := -lm -lSDL2
 
-bin/Accelerine: src/main.c src/game.c src/raster_utility.c src/texture.c src/bitmapfont.c
-	gcc $^ -o $@ $(CXXFLAGS) $(INCLUDE) $(LIBS)
+.PHONY: all run clean
+
+all: $(EXE)
+
+$(EXE): $(OBJS) | $(BIN)
+	$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BIN) $(OBJ):
+	$(MKDIR) $@
+
+run: $(EXE)
+	$<
 
 clean:
-	rm bin/Accelerine
+	$(RMDIR) $(OBJ) $(BIN)
