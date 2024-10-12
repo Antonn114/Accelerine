@@ -3,7 +3,7 @@
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
-SDL_Texture *texture = NULL;
+SDL_Texture *texture_raster = NULL;
 
 int running = 1;
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
       SDL_CreateRenderer(window, -1,
                          SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC |
                              SDL_RENDERER_TARGETTEXTURE);
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+  texture_raster = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                               SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH,
                               SCREEN_HEIGHT);
   /* Main SDL Loop */
@@ -37,8 +37,15 @@ int main(int argc, char **argv) {
   /* Setup Game */
   game_setup();
 
+  Uint64 NOW = SDL_GetPerformanceCounter();
+  Uint64 LAST = 0;
+  float deltaTime = 0;
+
   while (running) {
-    Uint64 start = SDL_GetPerformanceCounter();
+    LAST = NOW;
+    NOW = SDL_GetPerformanceCounter();
+
+    deltaTime = (float)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
 
     while (SDL_PollEvent(&sdl_event) != 0) {
       if (sdl_event.type == SDL_QUIT) {
@@ -50,20 +57,16 @@ int main(int argc, char **argv) {
     }
 
     /* Main game loop */
-    game_update();
+    game_update(deltaTime);
 
     /* Update the frame */
-    SDL_UpdateTexture(texture, NULL, screenPixels,
+    SDL_UpdateTexture(texture_raster, NULL, screenPixels,
                       SCREEN_WIDTH * sizeof(Uint32));
 
     /* Update the window */
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderCopy(renderer, texture_raster, NULL, NULL);
     SDL_RenderPresent(renderer);
-
-    Uint64 end = SDL_GetPerformanceCounter();
-    float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
-    printf("Current FPS: %f\n", 1.0f / elapsed);
   }
   game_end();
   SDL_DestroyWindow(window);
