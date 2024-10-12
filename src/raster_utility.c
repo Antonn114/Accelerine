@@ -29,7 +29,7 @@ void render_text(bitmapfont *font, int x, int y, const char *text) {
         int ascii = (unsigned char)text[i];
         render_image(&font->font_tex, curX, curY, font->x[ascii],
                      font->y[ascii], font->w[ascii], font->h[ascii]);
-        curX += font->w[ascii] + 1;
+        curX += font->w[ascii] + 4;
       }
     }
   }

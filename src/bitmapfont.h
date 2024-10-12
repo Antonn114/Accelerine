@@ -5,10 +5,10 @@
 
 typedef struct bitmapfont_s {
     texture font_tex;
-    int x[256], y[256], w[256], h[256];
+    int x[128], y[128], w[128], h[128];
     int mNewLine, mSpace;
 } bitmapfont;
 
-void load_bitmapfont(bitmapfont* font, const char* file_path);
+int load_bitmapfont(bitmapfont* font, const char* file_path);
 
 #endif // ACCELERINE_BITMAPFONT_H

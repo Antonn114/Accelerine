@@ -1,15 +1,18 @@
 #include "bitmapfont.h"
 #include "texture.h"
 
-void load_bitmapfont(bitmapfont *font, const char *file_path) {
-  load_texture(&font->font_tex, file_path);
+int load_bitmapfont(bitmapfont *font, const char *file_path) {
+  if (load_texture(&font->font_tex, file_path)){
+    printf("Unable to load bitmapfont: %s\n", file_path);
+    return 1;
+  }
   int cellW = font->font_tex.width / 16;
-  int cellH = font->font_tex.height / 16;
+  int cellH = font->font_tex.height / 8;
   int top = cellH;
   int baseA = cellH;
   int currentChar = 0;
   Uint32 bgColor = get_texture_pixel(&font->font_tex, 0, 0);
-  for (int rows = 0; rows < 16; ++rows) {
+  for (int rows = 0; rows < 8; ++rows) {
     for (int cols = 0; cols < 16; ++cols) {
       // Default offsets
       font->x[currentChar] = cellW * cols;
@@ -83,8 +86,9 @@ void load_bitmapfont(bitmapfont *font, const char *file_path) {
   font->mNewLine = baseA - top;
 
   // Lop off excess top pixels
-  for (int i = 0; i < 256; ++i) {
+  for (int i = 0; i < 128; ++i) {
     font->y[i] += top;
     font->h[i] -= top;
   }
+  return 0;
 }

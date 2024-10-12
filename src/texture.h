@@ -12,7 +12,7 @@ typedef struct texture_s {
     // ... but 'n' will always be the number that it would have been if you said 0
 } texture;
 
-void load_texture(texture* i, const char* file_path);
+int load_texture(texture* i, const char* file_path);
 inline Uint32 get_texture_pixel(texture* i, int x, int y){
     return i->data[y*i->width*i->n + x*i->n + 3] << (24)
                 | i->data[y*i->width*i->n+ x*i->n + 0] << (16)

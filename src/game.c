@@ -11,7 +11,7 @@ float old_FPS = 0;
 
 void game_setup() {
   load_texture(&texture_floor, "gameassets/road-extended.png");
-  load_bitmapfont(&test_bitmapfont, "gameassets/lazy_font.png");
+  load_bitmapfont(&test_bitmapfont, "gameassets/press_start_font.png");
   screenPixels =
       (Uint32 *)malloc(SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
   frame_counter = 0;
@@ -25,7 +25,7 @@ void display_fps_counter(float delta_time) {
     total_delta_time = 0;
   }
   char fps_counter[20];
-  sprintf(fps_counter, "FPS: %0.3f", old_FPS);
+  sprintf(fps_counter, "FPS: %0.f", old_FPS);
   render_text(&test_bitmapfont, 0, 0, fps_counter);
   frame_counter++;
   total_delta_time += delta_time;
@@ -34,6 +34,7 @@ void display_fps_counter(float delta_time) {
 void game_update(float delta_time) {
   clear_screen(COL_BLACK);
   display_fps_counter(delta_time);
+  render_text(&test_bitmapfont, 100, 100, "Hello, world!");
 }
 
 void game_end() { free(screenPixels); }
