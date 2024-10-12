@@ -52,13 +52,13 @@ void game_update(float delta_time) {
   my_character.vec_dir = HMM_DivV3F(my_character.vec_dir, magnitude);
   my_character.x += my_character.vec_dir.X*my_character.speed*delta_time;
   my_character.y += my_character.vec_dir.Y*my_character.speed*delta_time;
-  
+
   render_image(&my_character.tex, my_character.x, my_character.y, 0, 0, my_character.tex.width, my_character.tex.height);
-  
+  render_image(&my_character.tex, input_mouse_x, input_mouse_y, 0, 0, my_character.tex.width, my_character.tex.height);
   // UI, HUD
-  char test_input[20];
-  sprintf(test_input, "X: %.2f Y: %.2f", my_character.x, my_character.y);
-  render_text(&test_bitmapfont, 100, 100, test_input);
+  char out_string[20];
+  sprintf(out_string, "Mouse pressed: %d", input_mouse_pressed);
+  render_text(&test_bitmapfont, 100, 400, out_string);
   display_fps_counter(delta_time);
 
   // Update FPS

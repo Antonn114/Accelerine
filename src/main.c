@@ -1,6 +1,7 @@
 #include "game.h"
 #include "input.h"
 #include "settings.h"
+#include <SDL2/SDL_events.h>
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
@@ -35,8 +36,9 @@ int main(int argc, char **argv) {
   SDL_Event sdl_event;
 
   /* Setup Game */
-  input_map_init();
+  input_init();
   game_setup();
+  SDL_ShowCursor(SDL_DISABLE);
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;
@@ -48,27 +50,29 @@ int main(int argc, char **argv) {
     deltaTime = (float)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
 
     while (SDL_PollEvent(&sdl_event) != 0) {
-      if (sdl_event.type == SDL_QUIT) {
-        running = 0;
-      }
-      else if( sdl_event.type == SDL_KEYDOWN ){
-        switch(sdl_event.key.keysym.scancode){
-          case SDL_SCANCODE_ESCAPE:
-            running = 0;
+      switch(sdl_event.type){
+        case SDL_QUIT:
+          running = 0;
+        break;
+        case SDL_KEYDOWN:
+          input_map_turn_on(sdl_event.key.keysym.scancode);
+        break;
+        case SDL_KEYUP:
+          input_map_turn_off(sdl_event.key.keysym.scancode);
           break;
-          default:
-            input_map_turn_on(sdl_event.key.keysym.scancode);
-          break;
-        }
-      }
-      if( sdl_event.type == SDL_KEYUP ){
-        switch(sdl_event.key.keysym.scancode){
-          default:
-            input_map_turn_off(sdl_event.key.keysym.scancode);
-          break;
-        }
+        case SDL_MOUSEMOTION: case SDL_MOUSEBUTTONDOWN: case SDL_MOUSEBUTTONUP:
+          SDL_GetMouseState( &input_mouse_x, &input_mouse_y);
+          if (sdl_event.type == SDL_MOUSEBUTTONDOWN){
+            input_mouse_pressed = 1;
+          }else if (sdl_event.type == SDL_MOUSEBUTTONUP){
+            input_mouse_pressed = 0;
+          }
+        break;
+        default:
+        break;
       }
     }
+
     /* Main game loop */
     game_update(deltaTime);
 
