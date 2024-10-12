@@ -11,3 +11,9 @@ int load_texture(texture *i, const char *file_path) {
   }
   return 0;
 }
+
+
+void free_texture(texture *i){
+  free(i->data);
+  i->width = i->height = i->n = 0;
+}

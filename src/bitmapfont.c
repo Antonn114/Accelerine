@@ -92,3 +92,8 @@ int load_bitmapfont(bitmapfont *font, const char *file_path) {
   }
   return 0;
 }
+
+
+void free_bitmapfont(bitmapfont *font){
+  free_texture(&font->font_tex);
+}

@@ -5,7 +5,7 @@
 #include "bitmapfont.h"
 #include "texture.h"
 #include "settings.h"
-#include "color_palette.h"
+#include "color.h"
 
 #define m_pixel(x, y) y *SCREEN_WIDTH + x
 

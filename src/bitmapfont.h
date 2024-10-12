@@ -10,5 +10,6 @@ typedef struct bitmapfont_s {
 } bitmapfont;
 
 int load_bitmapfont(bitmapfont* font, const char* file_path);
+void free_bitmapfont(bitmapfont* font);
 
 #endif // ACCELERINE_BITMAPFONT_H

@@ -19,5 +19,6 @@ inline Uint32 get_texture_pixel(texture* i, int x, int y){
                 | i->data[y*i->width*i->n + x*i->n + 1] << (8)
                 | i->data[y*i->width*i->n + x*i->n + 2];;
 }
+void free_texture(texture* i);
 
 #endif // ACCELERINE_TEXTURE_H
