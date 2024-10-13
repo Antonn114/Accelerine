@@ -20,20 +20,34 @@
 #define blue(rgba) ((rgba) & ((1 << 8) - 1))
 
 typedef struct color_f_s{
-  float r, g, b, a;
+  float r, g, b, a; // each RGBA value is normalized to be in [0, 1]
 } color_f;
 
+/**
+* Internal raster board before handing it to the SDL frontend
+*/
 extern Uint32 *screenPixels;
 
+/**
+* Normal blend color `a` on color `b`.
+* `out_alpha = a.alpha + b.alpha * (1.0 - a.alpha)`
+* `out_RGB = a.RGB * a.alpha + b.RGB * (1.0 - a.alpha)`
+*/
 extern color_f normal_blend(color_f a, color_f b);
-extern color_f multiply_blend(color_f a, color_f b);
 
-extern color_f color_uint_to_float(Uint32 c);
-extern Uint32 color_float_to_uint(color_f c);
+/**
+ * Normalize each RGBA value to be between `0` and `1` and return a `color_f` struct
+ */
+extern color_f normalize_color(Uint32 c);
+
+/**
+ * Make `color_f` useful for updating pixels on the screen
+ */
+extern Uint32 encode_color(color_f c);
 
 
 /**
-* Clear the screen to a ARGB color under Uin32
+* Clear the screen to a color
 */
 extern void clear_screen(Uint32 col);
 
@@ -49,20 +63,9 @@ extern void render_image(texture *tex, int offset_x, int offset_y, int x, int y,
 extern void render_text(bitmapfont *font, int x, int y, const char *text);
 
 /**
- * Alpha blending of `col1` over `col2`
+ * Update pixel `(dst_x, dst_y)` with `col` using normal blend
  */
-extern Uint32 alpha_blending(Uint32 col1, Uint32 col2);
-
-/**
- * Update pixel `(dst_x, dst_y)` with `col` over the last colour
- */
-extern void update_pixel_alpha_blending(int dst_x, int dst_y, Uint32 col);
-
-/**
- * Replace color of pixel `(dst_x, dst_y)` with `col`
- */
-extern void replace_pixel(int dst_x, int dst_y, Uint32 col);
-
+extern void update_pixel(int dst_x, int dst_y, Uint32 col);
 
 
 #endif // ACCELERINE_RASTER_H

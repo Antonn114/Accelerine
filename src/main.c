@@ -39,7 +39,6 @@ int main(int argc, char **argv) {
   /* Setup Game */
   input_init();
   game_setup();
-  SDL_ShowCursor(SDL_DISABLE);
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;

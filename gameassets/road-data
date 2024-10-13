@@ -1,0 +1,23 @@
+# race track 1
+s 2
+c r 1
+s 4
+c l 1
+s 1
+c r 1
+s 2
+c r 1
+s 1
+c r 1
+s 1
+c l 1
+s 1
+c r 1
+c r 1
+c l 1
+c l 1
+s 5
+c r 1
+s 1
+c r 1
+s 4

@@ -1,10 +1,5 @@
 #include "raster.h"
 
-float alpha_blend_util(float a, float b, float alpha_a, float alpha_b,
-                       float out_alpha) {
-  return (a * alpha_a + b * alpha_b * (1.0 - alpha_a)) / (out_alpha + 0.0001);
-}
-
 color_f normal_blend(color_f a, color_f b){
   color_f out;
   out.a = a.a + b.a* (1.0 - a.a);
@@ -14,7 +9,7 @@ color_f normal_blend(color_f a, color_f b){
   return out;
 }
 
-color_f color_uint_to_float(Uint32 c) {
+color_f normalize_color(Uint32 c) {
   color_f out;
   out.a = alpha(c) / 255.0;
   out.r = red(c) / 255.0;
@@ -23,16 +18,16 @@ color_f color_uint_to_float(Uint32 c) {
   return out;
 }
 
-Uint32 color_float_to_uint(color_f c) {
+Uint32 encode_color(color_f c) {
   return m_color((int)(c.r * 255), (int)(c.g * 255), (int)(c.b * 255),
                  (int)(c.a * 255));
 }
 Uint32 alpha_blending(Uint32 col1, Uint32 col2) {
-  return color_float_to_uint(
-      normal_blend(color_uint_to_float(col1), color_uint_to_float(col2)));
+  return encode_color(
+      normal_blend(normalize_color(col1), normalize_color(col2)));
 }
 
-void update_pixel_alpha_blending(int dst_x, int dst_y, Uint32 col) {
+void update_pixel(int dst_x, int dst_y, Uint32 col) {
   screenPixels[m_pixel(dst_x, dst_y)] =
       alpha_blending(col, screenPixels[m_pixel(dst_x, dst_y)]);
 }
@@ -48,7 +43,7 @@ void render_image(texture *tex, int offset_x, int offset_y, int x, int y, int w,
   for (int _x = MAX(0, -offset_x); _x < MIN(w, SCREEN_WIDTH - offset_x); _x++) {
     for (int _y = MAX(0, -offset_y); _y < MIN(h, SCREEN_HEIGHT - offset_y);
          _y++) {
-      update_pixel_alpha_blending(offset_x + _x, offset_y + _y,
+      update_pixel(offset_x + _x, offset_y + _y,
                                   get_texture_pixel(tex, _x + x, _y + y));
     }
   }

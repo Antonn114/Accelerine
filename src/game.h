@@ -6,6 +6,9 @@
 #include "settings.h"
 #include "raster.h"
 #include "input.h"
+#include "utility.h"
+#include "bitmapfont.h"
+#include "texture.h"
 
 /**
  * Setup function for the game, which is executed before the main game loop and any keyboard event.
