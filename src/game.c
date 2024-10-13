@@ -1,22 +1,18 @@
 #include "game.h"
 
-Uint32 *screenPixels; // We store the information of RGBA in each Uint32. This was declared in raster.h
-
-fps_counter my_fps_counter;
-texture texture_floor;
-texture mouse_pointer_tex;
-bitmapfont test_bitmapfont;
-
-typedef struct character_s{
+typedef struct character_s {
   float x, y, z;
   float speed;
   HMM_Vec3 vec_dir;
   texture tex;
 } character;
 
+fps_counter my_fps_counter;
+texture texture_floor;
+texture mouse_pointer_tex;
+bitmapfont test_bitmapfont;
+
 character my_character;
-
-
 
 void game_setup() {
   load_texture(&texture_floor, "gameassets/road-extended.png");

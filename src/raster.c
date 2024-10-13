@@ -1,8 +1,10 @@
 #include "raster.h"
 
-color_f normal_blend(color_f a, color_f b){
+Uint32 *screenPixels;
+
+color_f normal_blend(color_f a, color_f b) {
   color_f out;
-  out.a = a.a + b.a* (1.0 - a.a);
+  out.a = a.a + b.a * (1.0 - a.a);
   out.r = a.r * a.a + b.r * (1.0 - a.a);
   out.g = a.g * a.a + b.g * (1.0 - a.a);
   out.b = a.b * a.a + b.b * (1.0 - a.a);
@@ -44,7 +46,7 @@ void render_image(texture *tex, int offset_x, int offset_y, int x, int y, int w,
     for (int _y = MAX(0, -offset_y); _y < MIN(h, SCREEN_HEIGHT - offset_y);
          _y++) {
       update_pixel(offset_x + _x, offset_y + _y,
-                                  get_texture_pixel(tex, _x + x, _y + y));
+                   get_texture_pixel(tex, _x + x, _y + y));
     }
   }
 }

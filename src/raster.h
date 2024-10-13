@@ -1,9 +1,9 @@
 #ifndef ACCELERINE_RASTER_H
 #define ACCELERINE_RASTER_H
 
+#include "bitmapfont.h"
 #include "core.h"
 #include "settings.h"
-#include "bitmapfont.h"
 #include "texture.h"
 
 #define m_pixel(x, y) y *SCREEN_WIDTH + x
@@ -19,24 +19,25 @@
 #define green(rgba) (((rgba) >> 8) & ((1 << 8) - 1))
 #define blue(rgba) ((rgba) & ((1 << 8) - 1))
 
-typedef struct color_f_s{
-  float r, g, b, a; // each RGBA value is normalized to be in [0, 1]
+typedef struct color_f_s {
+  float r, g, b, a;  // each RGBA value is normalized to be in [0, 1]
 } color_f;
 
 /**
-* Internal raster board before handing it to the SDL frontend
-*/
+ * Internal raster board before handing it to the SDL frontend
+ */
 extern Uint32 *screenPixels;
 
 /**
-* Normal blend color `a` on color `b`.
-* `out_alpha = a.alpha + b.alpha * (1.0 - a.alpha)`
-* `out_RGB = a.RGB * a.alpha + b.RGB * (1.0 - a.alpha)`
-*/
+ * Normal blend color `a` on color `b`.
+ * `out_alpha = a.alpha + b.alpha * (1.0 - a.alpha)`
+ * `out_RGB = a.RGB * a.alpha + b.RGB * (1.0 - a.alpha)`
+ */
 extern color_f normal_blend(color_f a, color_f b);
 
 /**
- * Normalize each RGBA value to be between `0` and `1` and return a `color_f` struct
+ * Normalize each RGBA value to be between `0` and `1` and return a `color_f`
+ * struct
  */
 extern color_f normalize_color(Uint32 c);
 
@@ -45,21 +46,21 @@ extern color_f normalize_color(Uint32 c);
  */
 extern Uint32 encode_color(color_f c);
 
-
 /**
-* Clear the screen to a color
-*/
+ * Clear the screen to a color
+ */
 extern void clear_screen(Uint32 col);
 
 /**
-* Render an image to origin `(offset_x, offset_y)` with a cropped image from `(x, y)` to `(x + w, y + h)`
-*/
+ * Render an image to origin `(offset_x, offset_y)` with a cropped image from
+ * `(x, y)` to `(x + w, y + h)`
+ */
 extern void render_image(texture *tex, int offset_x, int offset_y, int x, int y,
-                  int w, int h);
+                         int w, int h);
 
 /**
-* Render some text to origin `(x, y)`
-*/
+ * Render some text to origin `(x, y)`
+ */
 extern void render_text(bitmapfont *font, int x, int y, const char *text);
 
 /**
@@ -67,5 +68,4 @@ extern void render_text(bitmapfont *font, int x, int y, const char *text);
  */
 extern void update_pixel(int dst_x, int dst_y, Uint32 col);
 
-
-#endif // ACCELERINE_RASTER_H
+#endif  // ACCELERINE_RASTER_H

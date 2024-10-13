@@ -1,9 +1,9 @@
 #ifndef ACCELERINE_CORE_H
 #define ACCELERINE_CORE_H
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 /* Math */
 #define HANDMADE_MATH_NO_SIMD
@@ -16,4 +16,4 @@
 /* SDL2 */
 #include <SDL2/SDL.h>
 
-#endif // ACCELERINE_CORE_H
+#endif  // ACCELERINE_CORE_H

@@ -13,11 +13,11 @@ int load_texture(texture *i, const char *file_path) {
   return 0;
 }
 
-void set_texture_opacity(texture *tex, float opacity){
-  tex->opacity = opacity; 
+void set_texture_opacity(texture *tex, float opacity) {
+  tex->opacity = opacity;
 }
 
-void free_texture(texture *i){
+void free_texture(texture *i) {
   free(i->data);
   i->width = i->height = i->n = 0;
 }

@@ -1,8 +1,6 @@
 #include "game.h"
 #include "input.h"
 #include "settings.h"
-#include <SDL2/SDL_blendmode.h>
-#include <SDL2/SDL_events.h>
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
@@ -11,8 +9,8 @@ SDL_Texture *texture_raster = NULL;
 int running = 1;
 
 /**
- * Accelerine main driver code. Most SDL2 related functions are stored here. For the main game, please see
- * game.c
+ * Accelerine main driver code. Most SDL2 related functions are stored here.
+ * For the main game, please see game.c
  */
 int main(int argc, char **argv) {
   /* Initialize SDL */

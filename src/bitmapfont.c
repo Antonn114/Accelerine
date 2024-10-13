@@ -1,12 +1,13 @@
 #include "bitmapfont.h"
+
 #include "texture.h"
 
 int load_bitmapfont(bitmapfont *font, const char *file_path) {
-  if (load_texture(&font->font_tex, file_path)){
+  if (load_texture(&font->font_tex, file_path)) {
     printf("Unable to load bitmapfont: %s\n", file_path);
     return 1;
   }
-  
+
   int cellW = font->font_tex.width / 16;
   int cellH = font->font_tex.height / 8;
   int top = cellH;
@@ -95,7 +96,4 @@ int load_bitmapfont(bitmapfont *font, const char *file_path) {
   return 0;
 }
 
-
-void free_bitmapfont(bitmapfont *font){
-  free_texture(&font->font_tex);
-}
+void free_bitmapfont(bitmapfont *font) { free_texture(&font->font_tex); }

@@ -17,8 +17,9 @@ typedef struct fps_counter_s {
 void init_fps_counter(fps_counter* o, float _update_delay);
 
 /**
- * Increase FPS counter variables. If `update_delay` ms has passed since it was last updated then we update `fps` and reset `total_time` and `frame_count`
+ * Increase FPS counter variables. If `update_delay` ms has passed since it was
+ * last updated then we update `fps` and reset `total_time` and `frame_count`
  */
 void increment_fps_counter(fps_counter* o, float delta_time);
 
-#endif // ACCELERINE_UTILITY_H
+#endif  // ACCELERINE_UTILITY_H
