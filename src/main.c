@@ -11,7 +11,7 @@ SDL_Texture *texture_raster = NULL;
 int running = 1;
 
 /**
- * Accelerine main driver code for SDL2 frontend. For the main game, please see
+ * Accelerine main driver code. Most SDL2 related functions are stored here. For the main game, please see
  * game.c
  */
 int main(int argc, char **argv) {
@@ -44,8 +44,6 @@ int main(int argc, char **argv) {
   Uint64 LAST = 0;
   float deltaTime = 0;
   while (running) {
-    
-
     while (SDL_PollEvent(&sdl_event)) {
       switch (sdl_event.type) {
         case SDL_QUIT:
